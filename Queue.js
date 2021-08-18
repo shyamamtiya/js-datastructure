@@ -18,6 +18,7 @@ class Queue {
       this.last.next = newNode;
       this.last = newNode;
     }
+    this.size++;
     return this;
   }
 
@@ -25,9 +26,11 @@ class Queue {
     let temp = this.first;
     if (!this.first) {
       return null;
-    } else {
-      this.first = this.first.next;
     }
+    if (this.first == this.last) {
+      this.last = null;
+    }
+    this.first = this.first.next;
     this.size--;
     return temp.value;
   }
