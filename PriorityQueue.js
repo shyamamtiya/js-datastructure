@@ -1,4 +1,10 @@
-class MaxBinaryHeap {
+class Node {
+  constructor(val, priority) {
+    this.value = val;
+    this.priority = priority;
+  }
+}
+class PriorityQueue {
   constructor() {
     this.values = [];
   }
@@ -10,7 +16,7 @@ class MaxBinaryHeap {
     while (newlyInsertedItemIndex > 0) {
       let parentIndex = Math.floor((newlyInsertedItemIndex - 1) / 2);
       let parent = this.values[parentIndex];
-      if (parent < item) {
+      if (parent.priority < item.priority) {
         this.values[parentIndex] = item; //swap parent and child
         this.values[newlyInsertedItemIndex] = parent; //swap parent and child
         newlyInsertedItemIndex = parentIndex; // //update  index for newParent
@@ -20,12 +26,13 @@ class MaxBinaryHeap {
     }
   }
 
-  insert(node) {
-    this.values.push(node);
+  enqueue(value, priority) {
+    let newNode = new Node(value, priority);
+    this.values.push(newNode);
     this.bubbleUp();
   }
 
-  extractMax() {
+  dequeue() {
     if (!this.values.length) {
       return;
     }
@@ -54,11 +61,14 @@ class MaxBinaryHeap {
         rightChild = Number.MIN_VALUE;
       }
       if (
-        (leftChild != Number.MIN_VALUE && newRoot < leftChild) ||
-        (rightChild != Number.MIN_VALUE && newRoot < rightChild)
+        (leftChild != Number.MIN_VALUE &&
+          newRoot.priority < leftChild.priority) ||
+        (rightChild != Number.MIN_VALUE &&
+          newRoot.priority < rightChild.priority)
       ) {
-        let temp = leftChild > rightChild ? leftChild : rightChild; //swap current root with left child or right child
-        if (leftChild > rightChild) {
+        let temp =
+          leftChild.priority > rightChild.priority ? leftChild : rightChild; //swap current root with left child or right child
+        if (leftChild.priority > rightChild.priority) {
           // if left child is max then right child,swap it with left cild
           arr[leftChildIndex] = this.values[index];
           this.values[index] = temp;
@@ -79,33 +89,14 @@ class MaxBinaryHeap {
   }
 }
 
-let heap = new MaxBinaryHeap();
-heap.insert(41);
-heap.insert(39);
-heap.insert(33);
-heap.insert(18);
-heap.insert(27);
-heap.insert(12);
-heap.insert(55);
-console.log(heap.extractMax());
+let heap = new PriorityQueue();
+heap.enqueue(41, 1);
+heap.enqueue(39, 3);
+heap.enqueue(33, 4);
+heap.enqueue(18, 7);
+heap.enqueue(27, 5);
+heap.enqueue(12, 8);
+heap.enqueue(55, 9);
+console.log(heap.dequeue());
 
-console.log(heap.values);
-// get parentIndex by (index - 1 )/2
-//get childIndex by (leftchild = 2* Index + 1) ,(rightchild = 2 * Index + 2)
-
-//extractMax pseudo code
-// 1.get first element from list
-// 2.swap last element with first element from list
-// 3.remove last element from list
-// 4. check current root node i.e. first element of list
-//     if left child is max (leftchild = 2* Index + 1)
-//         swap it with current root node
-//     if right child is max (rightchild = 2 * Index + 2)
-//         swap is with current node
-
-//     otherwise
-//         break
-
-// Big O
-// Insert/Remove  - log (n)
-// search O(n)
+//prioriry is implemented using heap
